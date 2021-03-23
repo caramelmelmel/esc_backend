@@ -40,7 +40,7 @@ CREATE TABLE tenant(
     tenant_name varchar(50),
     category_ID integer,
     store_des VARCHAR(250),
-    email TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     store_id integer,
     CONSTRAINT fk_cat
     FOREIGN KEY(category_ID)
