@@ -1,56 +1,40 @@
-
-/*const express = require('express')
-const Sequelize = require('sequelize')
+const express = require('express')
+const bodyParser = require('body-parser')
+const { request, response } = require('express')
 const app = express()
-const port = 3000
-app.use(express.json());
-const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname')
-sequelize
-.authenticate()
-.then(() => {
-console.log('Connection has been established successfully.');
-})
-.catch(err => {
-console.error('Unable to connect to the database:', err);
-});
-const User = sequelize.define('user', {
-// attributes
-firstName: {
-type: Sequelize.STRING,
-allowNull: false
-},
-lastName: {
-type: Sequelize.STRING
-// allowNull defaults to true
-}
-}, {
-// options
-});
-// Note: using `force: true` will drop the table if it already exists
-User.sync({ force: true }) // Now the `users` table in the database corresponds to the model definition
-app.get('/', (req, res) => res.json({ message: 'Hello World' }))
-app.post('/user', async (req, res) => {
-try {
-const newUser = new User(req.body)
-await newUser.save()
-res.json({ user: newUser }) // Returns the new user that is created in the database
-} catch(error) {
-console.error(error)
-}
-})
-app.get('/user/:userId', async (req, res) => {
-const userId = req.params.userId
-try {
-const user = await User.findAll({
-where: {
-id: userId
-}
-}
+//const port = 3000
+
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
 )
-res.json({ user })
-} catch(error) {
-console.error(error)
-}
+
+//hoempage
+app.get('/', (request, response) => {
+    //response.json({ info: 'Node.js, Express, and Postgres API' })
+    response.send('Managed to send to Singhealth')
+  })
+
+//login page staff 
+app.get('/stafflogin',(request,response)=>
+{
+    response.send([1,2,3])
 })
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-*/
+//route 
+app.get('/api/stafflogin/:id',(request,response)=>{
+    response.send(request.params.id)
+})
+//query parameters
+//call http://localhost:5000/api/staff/2018/jan?sortBy=name
+//stored in key value pairs 
+app.get('/api/staff/:year/:month',(request,response)=>{
+    response.send(request.params)
+})
+//env variables
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+  })
