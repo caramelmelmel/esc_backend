@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS images cascade;
 DROP TABLE IF EXISTS update_compliance cascade;
 DROP TABLE IF EXISTS institute_monthly cascade;
 DROP TABLE IF EXISTS resolve_compliance;
+DROP TABLE IF EXISTS checklistfb;
+DROP TABLE IF EXISTS checklistnonfb;
 
 CREATE TABLE singhealth_institutions(
     institution_id serial PRIMARY KEY, 
@@ -27,12 +29,13 @@ CREATE TABLE category(
 CREATE TABLE checklistfb(
     fb_id serial PRIMARY KEY,
     category_ID integer references category,
-    fb_cat_name varchar(255) 
+    fb_cat_name text unique not null
 );
+
 create table checklistnonfb(
     nonfb_id serial PRIMARY KEY,
     category_ID integer references category,
-    nonfb_cat_name varchar(255)
+    nonfb_cat_name text unique not null
 );
 
 CREATE TABLE staff(
@@ -147,5 +150,22 @@ CREATE TABLE resolve_compliance(
 --INSERT commands for the hardcoded ones
 INSERT INTO category(category_name) values('FB'),('Non_FB');
 
---INSERT INTO checklist(category_ID,check_name) values
---()
+-- set the category at the backend if category = 1, then add to checklist 
+-- else non fb
+INSERT INTO checklistfb(category_ID,fb_cat_name) values
+(1,'professionalism'),
+(1,'staff hygiene'),
+(1,'environment_cleanliness'),
+(1,'hand_hygiene'),
+(1,'storage_prep_food'),
+(1,'storage_refrigerator_warmer'),
+(1,'food'),
+(1,'beverage'),
+(1,'general_safety'),
+(1,'fire'),
+(1,'electrical');
+
+INSERT INTO checklistnonfb(category_ID,nonfb_cat_name) values
+(2,'professionalism'),
+(2,'staff_hygiene'),
+(2,'environment cleanliness');
