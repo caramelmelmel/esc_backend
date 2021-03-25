@@ -17,10 +17,22 @@ CREATE TABLE singhealth_institutions(
     institution_name VARCHAR(50) UNIQUE NOT NULL
 );
 
--- FB and non_fb 
+-- FB and non_fb for tenant checklist
 CREATE TABLE category(
     category_ID serial PRIMARY KEY,
     category_name VARCHAR(50) UNIQUE NOT NULL
+);
+
+--group the following into categories for the respective checklist FB and non fb
+CREATE TABLE checklistfb(
+    fb_id serial PRIMARY KEY,
+    category_ID integer references category,
+    fb_cat_name varchar(255) 
+);
+create table checklistnonfb(
+    nonfb_id serial PRIMARY KEY,
+    category_ID integer references category,
+    nonfb_cat_name varchar(255)
 );
 
 CREATE TABLE staff(
@@ -34,7 +46,7 @@ CREATE TABLE staff(
           ON DELETE CASCADE
 );
 
-
+-- On registration
 CREATE TABLE tenant(
     tenant_id serial PRIMARY KEY, 
     tenant_name varchar(50),
@@ -65,6 +77,7 @@ CREATE TABLE new_audit(
 );
 
 -- contains each and every checklist id that is passed here
+--front end to call this checklist
 CREATE TABLE checklist(
     checklist_id serial primary key,
     category_ID integer,
@@ -98,6 +111,7 @@ CREATE TABLE past_audits(
 );
 
 --storage of the image in the blob format
+--resolving of the images
 CREATE TABLE images(
     img_id serial primary key,
     imgname text, 
@@ -130,5 +144,8 @@ CREATE TABLE resolve_compliance(
     resolve_status boolean
 );
 
---INSERT commands for the hardcoded ones 
+--INSERT commands for the hardcoded ones
 INSERT INTO category(category_name) values('FB'),('Non_FB');
+
+--INSERT INTO checklist(category_ID,check_name) values
+--()
