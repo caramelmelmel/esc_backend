@@ -152,6 +152,7 @@ INSERT INTO category(category_name) values('FB'),('Non_FB');
 
 -- set the category at the backend if category = 1, then add to checklist 
 -- else non fb
+-- NOTE Only fb is completed!
 INSERT INTO checklistfb(category_ID,fb_cat_name) values
 (1,'professionalism'),
 (1,'staff hygiene'),
@@ -169,3 +170,8 @@ INSERT INTO checklistnonfb(category_ID,nonfb_cat_name) values
 (2,'professionalism'),
 (2,'staff_hygiene'),
 (2,'environment cleanliness');
+
+--CREATE A list of institutions involved 
+INSERT INTO singhealth_institutions(institution_name) values
+('CGH'),('KKH'),('SGH'),('SKH'),('NCCS'),('NDCS'),('NHCS'),('SNEC'),('BVH'),
+('OCH'),('Academia');
