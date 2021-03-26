@@ -48,7 +48,8 @@ CREATE TABLE staff(
    CONSTRAINT fk_Institution
       FOREIGN KEY(institution_id)
           REFERENCES singhealth_institutions(institution_id)
-          ON DELETE CASCADE
+          ON DELETE CASCADE,
+    password bytea 
 );
 
 -- On registration
@@ -64,7 +65,8 @@ CREATE TABLE tenant(
         REFERENCES category(category_ID)
         ON DELETE CASCADE
     , 
-    expiry_date date
+    expiry_date date,
+    password bytea
 );
 
 
