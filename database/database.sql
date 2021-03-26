@@ -28,13 +28,15 @@ CREATE TABLE category(
 --group the following into categories for the respective checklist FB and non fb
 CREATE TABLE checklistfb(
     fb_id serial PRIMARY KEY,
-    category_ID integer references category,
+    category_ID integer references category
+    ON DELETE CASCADE,
     fb_cat_name text unique not null
 );
 
 create table checklistnonfb(
     nonfb_id serial PRIMARY KEY,
-    category_ID integer references category,
+    category_ID integer references category
+    ON DELETE CASCADE,
     nonfb_cat_name text unique not null
 );
 
@@ -125,25 +127,30 @@ CREATE TABLE images(
 CREATE TABLE update_compliance(
     checklist_id integer references checklist,
     dateline date,
-    img_id integer references images,
+    img_id integer references images
+    ON DELETE CASCADE,
     resolve_status boolean
 );
 
 CREATE TABLE resolved_audits(
-    audit_id integer references new_audit,
+    audit_id integer references new_audit
+    ON DELETE CASCADE,
     resolve_status boolean CHECK (resolve_status = true)
 );
 
 CREATE TABLE institute_monthly(
     aud_month varchar,
-    inst_id integer references singhealth_institutions,
+    inst_id integer references singhealth_institutions
+    ON DELETE CASCADE,
     avg_score integer
 );
 
 --for staff to resolve the compliance for the tenant
 CREATE TABLE resolve_compliance(
-    aud_id integer references singhealth_institutions,
-    checklist_id integer references checklist,
+    aud_id integer references singhealth_institutions
+    ON DELETE CASCADE,
+    checklist_id integer references checklist
+    ON DELETE CASCADE,
     resolve_status boolean
 );
 
