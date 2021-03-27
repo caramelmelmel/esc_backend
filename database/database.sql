@@ -49,7 +49,7 @@ CREATE TABLE staff(
       FOREIGN KEY(institution_id)
           REFERENCES singhealth_institutions(institution_id)
           ON DELETE CASCADE,
-    password bytea 
+    password varchar(100) 
 );
 
 -- On registration
@@ -66,7 +66,7 @@ CREATE TABLE tenant(
         ON DELETE CASCADE
     , 
     expiry_date date,
-    password bytea
+    password varchar(100)
 );
 
 
