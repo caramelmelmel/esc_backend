@@ -12,7 +12,13 @@ DROP TABLE IF EXISTS update_compliance cascade;
 DROP TABLE IF EXISTS institute_monthly cascade;
 DROP TABLE IF EXISTS resolve_compliance;
 DROP TABLE IF EXISTS checklistfb;
-DROP TABLE IF EXISTS checklistnonfb;
+DROP TABLE IF EXISTS checklistnonfb cascade;
+DROP TABLE IF EXISTS stores cascade;
+
+CREATE TABLE stores(
+    store_id serial primary key,
+    store_name text
+);
 
 CREATE TABLE singhealth_institutions(
     institution_id serial PRIMARY KEY, 
@@ -59,14 +65,15 @@ CREATE TABLE tenant(
     category_ID integer,
     store_des VARCHAR(250),
     email TEXT UNIQUE NOT NULL,
-    store_id integer,
     CONSTRAINT fk_cat
     FOREIGN KEY(category_ID)
         REFERENCES category(category_ID)
         ON DELETE CASCADE
     , 
     expiry_date date,
-    password varchar(100)
+    password varchar(100),
+    store_id integer references stores,
+    inst_id integer references singhealth_institutions
 );
 
 
@@ -121,8 +128,7 @@ CREATE TABLE past_audits(
 --resolving of the images
 CREATE TABLE images(
     img_id serial primary key,
-    imgname text, 
-    imgoid oid
+    imgname text 
 );
 
 --for tenants to resolve

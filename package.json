@@ -16,7 +16,8 @@
     "express",
     "jwt",
     "authentication",
-    "mongodb"
+    "mongodb",
+    "postgresql"
   ],
   "author": "Melody",
   "license": "ISC",
@@ -25,15 +26,25 @@
   },
   "homepage": "https://github.com/caramelmelmel/50.003_ESC_grp3_8_backend_repo#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.4",
     "mongoose": "^5.12.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.2"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
