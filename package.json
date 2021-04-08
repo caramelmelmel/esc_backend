@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch . --exec babel-node -- server"
+    "start": "nodemon --watch . --exec babel-node -- server node app.js"
   },
   "repository": {
     "type": "git",
@@ -53,9 +53,5 @@
     "babel-register": "^6.26.0",
     "babel-watch": "^7.4.1",
     "nodemon": "^2.0.7"
-  }
-  "engines": {
-    "node": "15.4.0",
-    "npm": "7.0.15"
   }
 }
