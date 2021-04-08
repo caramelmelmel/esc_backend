@@ -1,5 +1,7 @@
 const successMessage = { status: 'success' };
+
 const errorMessage = { status: 'error' };
+
 const status = {
   success: 200,
   error: 500,
@@ -11,9 +13,8 @@ const status = {
   nocontent: 204,
 };
 
-export {
+module.exports = {
   successMessage,
   errorMessage,
-  status,
-  trip_statuses,
+  status
 };

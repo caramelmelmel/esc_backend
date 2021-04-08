@@ -1,10 +1,8 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import {
-  errorMessage, status,
-} from '../helpers/status';
+const webtoken = require('jsonwebtoken');
 
-import env from '../../env';
+const stats = require('../helpers/status');
+
+const dotenv = require('dotenv')
 
 dotenv.config();
 
@@ -19,23 +17,23 @@ dotenv.config();
 const verifyToken = async (req, res, next) => {
   const { token } = req.headers;
   if (!token) {
-    errorMessage.error = 'Token not provided';
-    return res.status(status.bad).send(errorMessage);
+    stats.errorMessage.error = 'Token not provided';
+    return res.status(stats.status.bad).send(stats.errorMessage);
   }
   try {
-    const decoded =  jwt.verify(token, process.env.SECRET);
+    const decoded =  webtoken.jwt.verify(token, process.env.SECRET);
     req.user = {
       email: decoded.email,
       user_id: decoded.user_id,
       is_admin: decoded.is_admin,
-      first_name: decoded.first_name,
-      last_name: decoded.last_name,
+      name: decoded.name,
     };
     next();
   } catch (error) {
-    errorMessage.error = 'Authentication Failed';
-    return res.status(status.unauthorized).send(errorMessage);
+      //auth failed sending message now
+    stats.errorMessage.error = 'Authentication Failed';
+    return res.status(stats.status.unauthorized).send(errorMessage);
   }
 };
 
-export default verifyToken;
+module.exports =  verifyToken;

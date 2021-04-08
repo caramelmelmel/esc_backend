@@ -72,8 +72,8 @@ CREATE TABLE tenant(
     , 
     expiry_date date,
     password varchar(100),
-    store_id integer references stores,
-    inst_id integer references singhealth_institutions
+    store_name text
+    institution_id integer references singhealth_institutions
 );
 
 
