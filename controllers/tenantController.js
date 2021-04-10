@@ -7,10 +7,6 @@ const validate = require('../helpers/validations');
 const stats = require('../helpers/status')
 const poolconfig = require('../config/database').pool;
 const jwt = require('jsonwebtoken')
-const passport = require('passport')
-const JWTstrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require("passport-jwt").ExtractJwt;
-const localStrategy = require('passport-local').Strategy;
 
 require('dotenv').config();
 

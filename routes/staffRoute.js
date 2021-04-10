@@ -1,11 +1,12 @@
-import express from 'express';
 
-import { createAdmin, updateUserToAdmin } from '../controllers/adminController';
-import verifyAuth from '../middlewares/verifyAuth';
-
-const express = express();
+const express = require('express');
 const router = express.Router();
 
 const staffctrller = require('../controllers/staffController');
+const staffVerify = require('../middleware/verifyAuthStaff')
 
-router.post('/staffsignup',verifyAuth,staffctrller);
+//signup and login
+router.post('/signup',staffctrller.createStaff);
+router.post('/login',staffctrller.signinStaff)
+
+module.exports = router;
