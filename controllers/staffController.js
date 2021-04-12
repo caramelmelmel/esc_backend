@@ -19,7 +19,7 @@ const pool = new Pool({
 	password: process.env.PGPASSWORD,
 	port: process.env.PGPORT,
 	ssl: false
-})
+});
 
 //create query function here
 
@@ -141,6 +141,8 @@ const signinStaff = async (req, res) => {
 
 
   }
+
+  
 
   
   module.exports = {

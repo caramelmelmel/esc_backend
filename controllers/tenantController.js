@@ -13,13 +13,11 @@ require('dotenv').config();
 //use the pg pool library 
 const {Pool,Client} = require('pg');
 const pool = new Pool({
-  user: process.env.PGUSER,
-	host: process.env.PGHOST,
-	database: process.env.PGDATABASE,
-	password: process.env.PGPASSWORD,
-	port: process.env.PGPORT,
-	ssl: false
-})
+  connectionString: process.env.HEROKU_POSTGRESQL_MAROON_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 //create query function here
 
@@ -32,9 +30,8 @@ const createTenant = async (req,res)=>{
     //     tenant_name,category,store_des,email,expiry_date,password,store_name,institution_name
     // } = req.body;
     
-
-
-    const created_on = moment(new Date());
+    const created_on = moment(new Date()).format("YYYY-MM-DD");
+    console.log(`${created_on}`)
 
     //THIS PART WORKS
     if (validate.isEmpty(req.body.email) || validate.isEmpty(req.body.tenant_name) || validate.isEmpty(req.body.category_name) || validate.isEmpty(req.body.password) || validate.isEmpty(req.body.store_des)|| validate.isEmpty(req.body.expiry_date)||validate.isEmpty(req.body.store_name)||validate.isEmpty(req.body.institution_name)) {
@@ -82,9 +79,14 @@ const createTenant = async (req,res)=>{
       console.log('before try') 
 
       try {
+        //check for tenant expiry date 
+        const exp_date = req.body.expiry_date;
+        if(moment(created_on).isAfter(exp_date)){
+          return res.status(400).send('You are unable to register as your expiry date is long ago')
+        }
+
         console.log('inserting values')
         const { rows } = await dbQuery.query(createTenantQuery, values)
-        console.log(typeof rows)
         console.log('There is db response')
 
         const dbResponse = rows[0];
@@ -116,6 +118,8 @@ const createTenant = async (req,res)=>{
    */
 const signinTenant = async (req, res) => {
   const { email, password } = req.body;
+  const signedin_on = moment(new Date()).format("YYYY-MM-DD");
+  console.log(`${signedin_on}`)
     
   if (validate.isEmpty(email) || validate.isEmpty(password)) {
     stats.errorMessage.error = 'Email or Password detail is missing';
@@ -138,21 +142,27 @@ const signinTenant = async (req, res) => {
 
     if (!validate.comparePassword(dbResponse.password, password)) {
       stats.errorMessage.error = 'The password you provided is incorrect';
-      return res.status(status.bad).send(stats.errorMessage);
+      return res.status(stats.status.bad).send(stats.errorMessage);
     }
+    console.log(`${dbResponse.expiry_date}`)
+
+    if(moment(signedin_on).isAfter(dbResponse.expiry_date)){
+      const query2 = 'delete from tenant where email = $1'
+      const {rows} = await pool.query(query2,[req.body.email])
+      return res.status(stats.status.bad).send('Expiry date is before sign in date  ')
+    }
+
     const token =  jwt.sign({ id: dbResponse.tenant_id }, process.env.TENANT_TOKEN_SECRET, {
       expiresIn: 86400 // 24 hours
     });
     delete dbResponse.password;
     stats.successMessage.data = dbResponse;
     stats.successMessage.data.token = token;
-    return res.header('x-auth-token',token).send(stats.successMessage.data.token);
+    return res.header('x-auth-token',token).send(stats.successMessage.data);
   } catch (error) {
-    errorMessage.error = 'Operation was not successful';
+    stats.errorMessage.error = 'Operation was not successful';
     return res.status(stats.status.error).send(stats.errorMessage);
   }
-
-
   }
 
   

@@ -1,5 +1,4 @@
 const dotenv = require('dotenv');
-const jsonwt =  require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 dotenv.config();
 
@@ -9,7 +8,7 @@ dotenv.config();
    * @returns {Boolean} True or False
    */
 const isValidEmail = (email) => {
-  const regEx = /^\w{0,}@singhealth\.com\.sg$/;
+  const regEx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   return regEx.test(email);
 };
 
@@ -51,19 +50,7 @@ const empty = (input) => {
   }
 };
 
-//using jwt for auth 
-//payload here is the user object
-const generateUserToken = (email, id, is_admin, first_name, last_name) => {
-  const token = jsonwt.jwt.sign({
-    email,
-    user_id: id,
-    is_admin,
-    first_name,
-    last_name,
-  },
-  process.env.secret, { expiresIn: '3d' });
-  return token;
-};
+
 
 const saltRounds = 10;
 //hash the password using bcrypt 
@@ -80,6 +67,6 @@ module.exports= {
   validatePassword,
   isEmpty,
   empty,
-  generateUserToken,
-  hashPassword
+  hashPassword,
+  comparePassword
 };

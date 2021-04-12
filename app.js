@@ -1,12 +1,23 @@
-const http = require('http');
-const port = process.env.PORT || 3000
+const express = require('express');
+const app = express();
+const path = require('path');
+const port = process.env.PORT || 3000;
+const urlShortener = require('node-url-shortener');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/html');
-  res.end('<h1>Hello World</h1>');
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded());
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-server.listen(port,() => {
-  console.log(`Server running at port `+port);
+app.post('/url', function(req, res) {
+  const url = req.body.url
+
+  urlShortener.short(url, function(err, shortUrl){
+    res.send(shortUrl);
+  });
 });
+
+app.listen(port, () => console.log(`url-shortener listening on port ${port}!`));

@@ -10,10 +10,10 @@ DROP TABLE IF EXISTS resolved_audits cascade;
 DROP TABLE IF EXISTS images cascade;
 DROP TABLE IF EXISTS update_compliance cascade;
 DROP TABLE IF EXISTS institute_monthly cascade;
-DROP TABLE IF EXISTS resolve_compliance;
-DROP TABLE IF EXISTS checklistfb;
+DROP TABLE IF EXISTS resolve_compliance cascade;
+DROP TABLE IF EXISTS checklistfb cascade;
 DROP TABLE IF EXISTS checklistnonfb cascade;
-DROP TABLE IF EXISTS stores cascade;
+DROP TABLE IF EXISTS stores cascade ;
 
 CREATE TABLE stores(
     store_id serial primary key,
@@ -55,7 +55,8 @@ CREATE TABLE staff(
       FOREIGN KEY(institution_id)
           REFERENCES singhealth_institutions(institution_id)
           ON DELETE CASCADE,
-    password varchar(100) 
+    password varchar(100),
+    token text
 );
 
 -- On registration
@@ -72,8 +73,9 @@ CREATE TABLE tenant(
     , 
     expiry_date date,
     password varchar(100),
-    store_name text
-    institution_id integer references singhealth_institutions
+    store_name text unique,
+    institution_id integer references singhealth_institutions,
+    token text
 );
 
 
@@ -87,7 +89,9 @@ CREATE TABLE new_audit(
     CONSTRAINT fk_cat
     FOREIGN KEY(category_ID)
         REFERENCES category(category_ID)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    tenant_id integer references tenant,
+    noncompliances json
 );
 
 -- contains each and every checklist id that is passed here
